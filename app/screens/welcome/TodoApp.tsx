@@ -7,52 +7,46 @@ import {
   Platform,
 } from "react-native"
 import { observer } from "mobx-react-lite"
-import { Button, Header, Screen, Text, Wallpaper } from "../../components"
+import { Header, Screen, Text, Wallpaper } from "../../components"
 import { color, spacing, typography } from "../../theme"
 import Task from "../../components/task/Task"
 import { TextInput, TouchableOpacity } from "react-native-gesture-handler"
 
-const FULL: ViewStyle = { flex: 1 }
-const CONTAINER: ViewStyle = {
-  paddingHorizontal: spacing[4],
-  height: "100%"
-}
-const TEXT: TextStyle = {
-  color: color.palette.white,
-  fontFamily: typography.primary,
-}
-const BOLD: TextStyle = { fontWeight: "bold" }
-const HEADER: TextStyle = {
-  paddingTop: spacing[3],
-  paddingBottom: spacing[4] + spacing[1],
-  paddingHorizontal: 0,
-}
-const HEADER_TITLE: TextStyle = {
-  ...TEXT,
-  ...BOLD,
-  fontSize: 12,
-  lineHeight: 15,
-  textAlign: "center",
-  letterSpacing: 1.5,
-}
-const ITEMS: TextStyle = {
-  paddingTop: 20
-}
-const SECTIONTITLE: TextStyle = {
-  fontSize: 24,
-}
-const TASKWRAPPER: TextStyle = {
-  paddingTop: 80,
-  paddingHorizontal: 20,
-}
+
 export const TodoApp = observer(function WelcomeScreen() {
 
   const [todo, setTodo] = useState("");
   const [todoList, setTodoList] = useState([]);
 
+  interface todoItem {
+    txt: string,
+    done: boolean,
+    date: DateConstructor
+  }
   const handleSubmit = () => {
-    setTodoList([...todoList, todo])
-    console.log(todo)
+    if (todo) setTodoList([...todoList, {
+      txt: todo,
+      done: false,
+      date: Date.now()
+    }])
+    console.log(todoList)
+    setTodo("")
+  }
+  const handleDelete = (todo: string) => {
+    const newTodos = todoList.filter(item => todo !== item)
+    setTodoList(newTodos)
+    console.log("delete: ", todo)
+  }
+  const handleDone = (item: todoItem) => {
+    const updateList = todoList.filter(todoItem => {
+      if (todoItem.date === item.date) {
+        todoItem.done = !todoItem.done
+        return todoItem
+      }
+      return todoItem
+    }
+    )
+    setTodoList(updateList)
   }
   return (
     <View testID="WelcomeScreen" style={FULL}>
@@ -60,9 +54,15 @@ export const TodoApp = observer(function WelcomeScreen() {
       <Screen style={CONTAINER} preset="scroll" backgroundColor={color.transparent}>
         <Header headerTx="welcomeScreen.poweredBy" style={HEADER} titleStyle={HEADER_TITLE} />
         <View style={TASKWRAPPER}>
-          <Text style={SECTIONTITLE}>Todazs tasks</Text>
-          <View style={ITEMS}>{/* Todo Tasks */}
-            {todoList.map(todoItem => <Task text={todoItem} />)}
+          <Text style={SECTIONTITLE}>Todo List</Text>
+          <View style={ITEMS}>
+            {todoList.sort((a, b) => a.date - b.date).sort((a, b) => a.done - b.done).map(todoItem =>
+              <TouchableOpacity key={todoItem.date} onPress={() => handleDone(todoItem)}>
+
+                <Task todo={todoItem} handleDelete={handleDelete} />
+              </TouchableOpacity>
+
+            )}
           </View>
         </View>
         <KeyboardAvoidingView
@@ -113,4 +113,37 @@ const INPUT: TextStyle = {
   borderColor: "#fc0",
   borderWidth: 3,
   width: 250
+}
+
+const FULL: ViewStyle = { flex: 1 }
+const CONTAINER: ViewStyle = {
+  paddingHorizontal: spacing[4],
+  height: "100%"
+}
+const TEXT: TextStyle = {
+  color: color.palette.white,
+  fontFamily: typography.primary,
+}
+const BOLD: TextStyle = { fontWeight: "bold" }
+const HEADER: TextStyle = {
+  paddingTop: spacing[3],
+  paddingBottom: spacing[4] + spacing[1],
+  paddingHorizontal: 0,
+}
+const HEADER_TITLE: TextStyle = {
+  ...TEXT,
+  ...BOLD,
+  fontSize: 12,
+  lineHeight: 15,
+  textAlign: "center",
+  letterSpacing: 1.5,
+}
+const ITEMS: TextStyle = {
+  paddingTop: 20
+}
+const SECTIONTITLE: TextStyle = {
+  fontSize: 40,
+}
+const TASKWRAPPER: TextStyle = {
+  paddingHorizontal: 20,
 }
