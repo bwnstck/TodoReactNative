@@ -1,6 +1,5 @@
 import React from 'react'
-import { KeyboardAvoidingView, Platform, TextStyle, View } from 'react-native'
-import { TextInput } from 'react-native-gesture-handler'
+import { TextStyle, View } from 'react-native'
 import { Text } from '../text/text'
 
 const Task = ({ text }) => {

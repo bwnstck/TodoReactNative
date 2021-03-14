@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 import {
   View,
   ViewStyle,
@@ -11,7 +11,6 @@ import { Button, Header, Screen, Text, Wallpaper } from "../../components"
 import { color, spacing, typography } from "../../theme"
 import Task from "../../components/task/Task"
 import { TextInput, TouchableOpacity } from "react-native-gesture-handler"
-const bowserLogo = require("./bowser.png")
 
 const FULL: ViewStyle = { flex: 1 }
 const CONTAINER: ViewStyle = {
@@ -46,7 +45,15 @@ const TASKWRAPPER: TextStyle = {
   paddingTop: 80,
   paddingHorizontal: 20,
 }
-export const WelcomeScreen = observer(function WelcomeScreen() {
+export const TodoApp = observer(function WelcomeScreen() {
+
+  const [todo, setTodo] = useState("");
+  const [todoList, setTodoList] = useState([]);
+
+  const handleSubmit = () => {
+    setTodoList([...todoList, todo])
+    console.log(todo)
+  }
   return (
     <View testID="WelcomeScreen" style={FULL}>
       <Wallpaper />
@@ -55,18 +62,15 @@ export const WelcomeScreen = observer(function WelcomeScreen() {
         <View style={TASKWRAPPER}>
           <Text style={SECTIONTITLE}>Todazs tasks</Text>
           <View style={ITEMS}>{/* Todo Tasks */}
-            <Task text={"wuuuuhhh"} />
-            <Task text={"waaah"} />
-            <Task text={"wuuuuhhh"} />
-            <Task text={"waaah"} />
+            {todoList.map(todoItem => <Task text={todoItem} />)}
           </View>
         </View>
         <KeyboardAvoidingView
           behavior={Platform.OS === "ios" ? "padding " : "height"}
           style={WRITETASKWRAPPER}
         >
-          <TextInput style={INPUT} placeholder={"Write a task"} />
-          <TouchableOpacity>
+          <TextInput style={INPUT} placeholder={"Write a task"} value={todo} onChangeText={text => setTodo(text)} />
+          <TouchableOpacity onPress={() => handleSubmit()}>
             <View style={ADDWRAPPER}>
               <Text style={ADDTEXT}>+</Text>
             </View>
