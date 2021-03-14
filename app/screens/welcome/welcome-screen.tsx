@@ -1,15 +1,22 @@
 import React from "react"
-import { View, Image, ViewStyle, TextStyle, ImageStyle, SafeAreaView } from "react-native"
-import { useNavigation } from "@react-navigation/native"
+import {
+  View,
+  ViewStyle,
+  TextStyle,
+  KeyboardAvoidingView,
+  Platform,
+} from "react-native"
 import { observer } from "mobx-react-lite"
 import { Button, Header, Screen, Text, Wallpaper } from "../../components"
 import { color, spacing, typography } from "../../theme"
+import Task from "../../components/task/Task"
+import { TextInput, TouchableOpacity } from "react-native-gesture-handler"
 const bowserLogo = require("./bowser.png")
 
 const FULL: ViewStyle = { flex: 1 }
 const CONTAINER: ViewStyle = {
-  backgroundColor: color.transparent,
   paddingHorizontal: spacing[4],
+  height: "100%"
 }
 const TEXT: TextStyle = {
   color: color.palette.white,
@@ -29,88 +36,77 @@ const HEADER_TITLE: TextStyle = {
   textAlign: "center",
   letterSpacing: 1.5,
 }
-const TITLE_WRAPPER: TextStyle = {
-  ...TEXT,
-  textAlign: "center",
+const ITEMS: TextStyle = {
+  paddingTop: 20
 }
-const TITLE: TextStyle = {
-  ...TEXT,
-  ...BOLD,
-  fontSize: 28,
-  lineHeight: 38,
-  textAlign: "center",
+const SECTIONTITLE: TextStyle = {
+  fontSize: 24,
 }
-const ALMOST: TextStyle = {
-  ...TEXT,
-  ...BOLD,
-  fontSize: 26,
-  fontStyle: "italic",
+const TASKWRAPPER: TextStyle = {
+  paddingTop: 80,
+  paddingHorizontal: 20,
 }
-const BOWSER: ImageStyle = {
-  alignSelf: "center",
-  marginVertical: spacing[5],
-  maxWidth: "100%",
-}
-const CONTENT: TextStyle = {
-  ...TEXT,
-  color: "#BAB6C8",
-  fontSize: 15,
-  lineHeight: 22,
-  marginBottom: spacing[5],
-}
-const CONTINUE: ViewStyle = {
-  paddingVertical: spacing[4],
-  paddingHorizontal: spacing[4],
-  backgroundColor: "#5D2555",
-}
-const CONTINUE_TEXT: TextStyle = {
-  ...TEXT,
-  ...BOLD,
-  fontSize: 13,
-  letterSpacing: 2,
-}
-const FOOTER: ViewStyle = { backgroundColor: "#20162D", marginBottom: 64 }
-const FOOTER_CONTENT: ViewStyle = {
-  paddingVertical: spacing[4],
-  paddingHorizontal: spacing[4],
-}
-
 export const WelcomeScreen = observer(function WelcomeScreen() {
-  const navigation = useNavigation()
-  const nextScreen = () => navigation.navigate("demo")
-
   return (
     <View testID="WelcomeScreen" style={FULL}>
       <Wallpaper />
       <Screen style={CONTAINER} preset="scroll" backgroundColor={color.transparent}>
         <Header headerTx="welcomeScreen.poweredBy" style={HEADER} titleStyle={HEADER_TITLE} />
-        <Text style={TITLE_WRAPPER}>
-          <Text style={TITLE} text="Your new app, " />
-          <Text style={ALMOST} text="almost" />
-          <Text style={TITLE} text="!" />
-        </Text>
-        <Text style={TITLE} preset="header" tx="welcomeScreen.readyForLaunch" />
-        <Image source={bowserLogo} style={BOWSER} />
-        <Text style={CONTENT}>
-          This probably isn't what your app is going to look like. Unless your designer handed you
-          this screen and, in that case, congrats! You're ready to ship.
-        </Text>
-        <Text style={CONTENT}>
-          For everyone else, this is where you'll see a live preview of your fully functioning app
-          using Ignite.
-        </Text>
-      </Screen>
-      <SafeAreaView style={FOOTER}>
-        <View style={FOOTER_CONTENT}>
-          <Button
-            testID="next-screen-button"
-            style={CONTINUE}
-            textStyle={CONTINUE_TEXT}
-            tx="welcomeScreen.continue"
-            onPress={nextScreen}
-          />
+        <View style={TASKWRAPPER}>
+          <Text style={SECTIONTITLE}>Todazs tasks</Text>
+          <View style={ITEMS}>{/* Todo Tasks */}
+            <Task text={"wuuuuhhh"} />
+            <Task text={"waaah"} />
+            <Task text={"wuuuuhhh"} />
+            <Task text={"waaah"} />
+          </View>
         </View>
-      </SafeAreaView>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === "ios" ? "padding " : "height"}
+          style={WRITETASKWRAPPER}
+        >
+          <TextInput style={INPUT} placeholder={"Write a task"} />
+          <TouchableOpacity>
+            <View style={ADDWRAPPER}>
+              <Text style={ADDTEXT}>+</Text>
+            </View>
+          </TouchableOpacity>
+        </KeyboardAvoidingView>
+      </Screen>
     </View>
   )
 })
+const ADDWRAPPER: TextStyle = {
+  backgroundColor: "#fc0",
+  width: 50,
+  height: 50,
+  alignItems: "center",
+  justifyContent: "center",
+  borderRadius: 60,
+  borderWidth: 2,
+  borderColor: "black"
+}
+const ADDTEXT: TextStyle = {
+  color: "black",
+  fontSize: 30,
+}
+
+
+const WRITETASKWRAPPER: TextStyle = {
+  position: "absolute",
+  bottom: 60,
+  width: "100%",
+  flexDirection: "row",
+  justifyContent: "space-around",
+  alignItems: "center"
+
+}
+const INPUT: TextStyle = {
+  paddingVertical: 15,
+  paddingHorizontal: 15,
+  backgroundColor: "white",
+  borderRadius: 60,
+  borderColor: "#fc0",
+  borderWidth: 3,
+  width: 250
+}
