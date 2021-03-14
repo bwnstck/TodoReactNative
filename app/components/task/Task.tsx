@@ -28,6 +28,7 @@ const Task = ({ todo, handleDelete }) => {
 
                 <Text style={todo.done ? ITEMDONE : ITEMTEXT}>{todo.txt}</Text>
             </View>
+            <Text style={ITEMDONE}>{todo.date.getDate()}/{todo.date.getMonth()}/{todo.date.getFullYear()}</Text>
             <TouchableOpacity onPress={markAndDelete}>
 
                 <View style={marked ? CIRCULARFULL : CIRCULAR} />

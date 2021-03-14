@@ -10,7 +10,7 @@ import { observer } from "mobx-react-lite"
 import { Header, Screen, Text, Wallpaper } from "../../components"
 import { color, spacing, typography } from "../../theme"
 import Task from "../../components/task/Task"
-import { TextInput, TouchableOpacity } from "react-native-gesture-handler"
+import { ScrollView, TextInput, TouchableOpacity } from "react-native-gesture-handler"
 
 
 export const TodoApp = observer(function WelcomeScreen() {
@@ -27,7 +27,7 @@ export const TodoApp = observer(function WelcomeScreen() {
     if (todo) setTodoList([...todoList, {
       txt: todo,
       done: false,
-      date: Date.now()
+      date: new Date
     }])
     console.log(todoList)
     setTodo("")
@@ -53,8 +53,8 @@ export const TodoApp = observer(function WelcomeScreen() {
       <Wallpaper />
       <Screen style={CONTAINER} preset="scroll" backgroundColor={color.transparent}>
         <Header headerTx="welcomeScreen.poweredBy" style={HEADER} titleStyle={HEADER_TITLE} />
-        <View style={TASKWRAPPER}>
-          <Text style={SECTIONTITLE}>Todo List</Text>
+        <Text style={SECTIONTITLE}>Todo List</Text>
+        <ScrollView style={TASKWRAPPER}>
           <View style={ITEMS}>
             {todoList.sort((a, b) => a.date - b.date).sort((a, b) => a.done - b.done).map(todoItem =>
               <TouchableOpacity key={todoItem.date} onPress={() => handleDone(todoItem)}>
@@ -64,7 +64,7 @@ export const TodoApp = observer(function WelcomeScreen() {
 
             )}
           </View>
-        </View>
+        </ScrollView>
         <KeyboardAvoidingView
           behavior={Platform.OS === "ios" ? "padding " : "height"}
           style={WRITETASKWRAPPER}
@@ -115,7 +115,10 @@ const INPUT: TextStyle = {
   width: 250
 }
 
-const FULL: ViewStyle = { flex: 1 }
+const FULL: ViewStyle = {
+  flex: 1,
+  height: "100%"
+}
 const CONTAINER: ViewStyle = {
   paddingHorizontal: spacing[4],
   height: "100%"
@@ -146,4 +149,5 @@ const SECTIONTITLE: TextStyle = {
 }
 const TASKWRAPPER: TextStyle = {
   paddingHorizontal: 20,
+  height: "100%"
 }

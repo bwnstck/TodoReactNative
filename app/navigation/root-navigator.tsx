@@ -8,6 +8,7 @@ import React from "react"
 import { NavigationContainer, NavigationContainerRef } from "@react-navigation/native"
 import { createStackNavigator } from "@react-navigation/stack"
 import { MainNavigator } from "./main-navigator"
+import { TodoApp } from "../screens/welcome/TodoApp"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -34,7 +35,7 @@ const RootStack = () => {
     >
       <Stack.Screen
         name="mainStack"
-        component={MainNavigator}
+        component={TodoApp}
         options={{
           headerShown: false,
         }}

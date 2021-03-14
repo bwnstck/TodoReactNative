@@ -37,8 +37,6 @@ export function MainNavigator() {
       }}
     >
       <Stack.Screen name="welcome" component={TodoApp} />
-      <Stack.Screen name="demo" component={DemoScreen} />
-      <Stack.Screen name="demoList" component={DemoListScreen} />
     </Stack.Navigator>
   )
 }
